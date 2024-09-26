@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Tablas comparativas</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Laberintos</th>
+                <th>BFS</th>
+                <th>DFS</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>maze</td>
+                <td>319</td>
+                <td>265</td>
+            </tr>
+            <tr>
+                <td>maze2</td>
+                <td>331</td>
+                <td>227</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>punto 4 ejercicio sobre temperaturas</h2>
+    <p>
+        <strong>Importar bibliotecas:</strong> 
+        Importa la biblioteca TensorFlow, que es utilizada para construir y entrenar modelos de aprendizaje profundo, y NumPy, que se utiliza para trabajar con arreglos y matrices en Python.
+    </p>
+    
+    <pre><code>import tensorflow as tf 
+    import numpy as np</code></pre>
+    
+    <p>
+        <strong>Crear datos:</strong> 
+        Define dos arreglos de NumPy, <code>celsius</code> y <code>fahrenheit</code>, que contienen las temperaturas en grados Celsius y su correspondiente conversión a grados Fahrenheit, respectivamente. 
+        El argumento <code>dtype=float</code> asegura que los elementos del arreglo sean de tipo flotante.
+    </p>
+    
+    <pre><code>celsius = np.array([-40, -10, 0, 8, 15, 22, 38], dtype=float)
+    fahrenheit = np.array([-40, 14, 32, 46, 59, 72, 100], dtype=float)</code></pre>
+    
+    <p>
+        <strong>Esta parte está comentada:</strong> 
+        Si estuviera activa, crearía una capa densa con 1 unidad y la incluiría en un modelo secuencial. 
+        Este modelo sería una red neuronal simple con solo una capa de salida.
+    </p>
+    
+    <pre><code>#capa = tf.keras.layers.Dense(units=1, input_shape=[1])
+    #modelo = tf.keras.Sequential([capa])</code></pre>
+    
+    <p>
+        <strong>Definir capas:</strong> 
+        Se definen tres capas de la red neuronal:
+        <ul>
+            <li><code>oculta1</code>: Primera capa oculta con 3 neuronas y un único valor de entrada (la temperatura en Celsius).</li>
+            <li><code>oculta2</code>: Segunda capa oculta con 3 neuronas que recibe la salida de <code>oculta1</code>.</li>
+            <li><code>salida</code>: Capa de salida con 1 neurona, que generará la predicción (temperatura en Fahrenheit).</li>
+        </ul>
+        Se crea un modelo secuencial que apila las capas definidas anteriormente en el orden en que fueron añadidas.
+    </p>
+    
+    <pre><code>modelo = tf.keras.Sequential([oculta1, oculta2, salida])</code></pre>
+    
+    <p>
+        <strong>Compilar el modelo:</strong> 
+        Configura el modelo para el entrenamiento. Se especifica:
+        <ul>
+            <li><code>optimizer</code>: Se utiliza el optimizador Adam con una tasa de aprendizaje de 0.1.</li>
+            <li><code>loss</code>: Se establece la función de pérdida como error cuadrático medio (<code>mean_squared_error</code>), que es común para problemas de regresión.</li>
+        </ul>
+    </p>
+    
+    <pre><code>modelo.compile(
+        optimizer=tf.keras.optimizers.Adam(0.1),
+        loss='mean_squared_error'
+    )</code></pre>
+    
+    <p>
+        <strong>Entrenar el modelo:</strong> 
+        Llama a la función <code>fit</code> para entrenar el modelo con los datos de entrada <code>celsius</code> y los objetivos <code>fahrenheit</code>. 
+        Se entrena durante 1000 épocas, y <code>verbose=False</code> suprime la salida detallada durante el entrenamiento.
+    </p>
+    
+    <pre><code>historial = modelo.fit(celsius, fahrenheit, epochs=1000, verbose=False)</code></pre>
+    
+    <p>
+        <strong>Mensaje de finalización:</strong> 
+        Imprime un mensaje que indica que el modelo ha terminado de entrenarse.
+    </p>
+    
+    <pre><code>print("Modelo entrenado!")</code></pre>
+    
+    <p>
+        <strong>Importar Matplotlib:</strong> 
+        Importa la biblioteca Matplotlib para visualizar datos.
+    </p>
+    
+    <pre><code>import matplotlib.pyplot as plt</code></pre>
+    
+    <p>
+        <strong>Gráfica de pérdida:</strong> 
+        Se establece la etiqueta para el eje x (<code># Epoca</code>) y el eje y (<code>Magnitud de pérdida</code>), 
+        y se grafica la pérdida durante el entrenamiento utilizando los datos del historial del modelo.
+    </p>
+    
+    <pre><code>plt.xlabel("# Epoca")
+    plt.ylabel("Magnitud de pérdida")
+    plt.plot(historial.history["loss"])</code></pre>
+    
+    <p>
+        <strong>Realizar una predicción:</strong> 
+        Imprime un mensaje indicando que se va a realizar una predicción. 
+        Luego, utiliza el modelo para predecir la temperatura en Fahrenheit correspondiente a 100 °C.
+    </p>
+    
+    <pre><code>resultado = modelo.predict([100.0])</code></pre>
+    
+    <p>
+        <strong>Mostrar resultado:</strong> 
+        Imprime el resultado de la predicción en la consola, indicando la conversión de 100 °C a Fahrenheit.
+    </p>
+    
+    <pre><code>print("El resultado es " + str(resultado) + " fahrenheit!")</code></pre>
+    
+    <p>
+        <strong>Mostrar pesos:</strong> 
+        Imprime los pesos de cada capa del modelo. 
+        Los pesos son los parámetros que el modelo ajustó durante el entrenamiento. 
+        El primer <code>print</code> está comentado y no se ejecutará. 
+        Los siguientes imprimen los pesos de las dos capas ocultas y de la capa de salida.
+    </p>
+    
+    <pre><code>print("Variables internas del modelo")
+    #print(capa.get_weights())
+    print(oculta1.get_weights())
+    print(oculta2.get_weights())
+    print(salida.get_weights())</code></pre>
+    
+
+
+    
+</body>
+</html>
