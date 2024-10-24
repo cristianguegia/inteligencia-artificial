@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Código de Lógica en Python</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        pre {
+            background-color: #eaeaea;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        h1 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Condicionales de verdad</h1>
+
+<pre><code>
+from logic import *
+
+# Definir los símbolos
+rain = Symbol("rain")          # Llueve
+bbc = Symbol("bbc")            # Estudiantes visitan BBC
+unimayor = Symbol("unimayor")  # Estudiantes visitan Unimayor
+
+# Conjunto de conocimientos
+knowledge = And(
+    Implication(Not(rain), bbc),           # Si no llueve, los estudiantes visitan BBC
+    Or(bbc, unimayor),                     # Los estudiantes visitaron BBC o Unimayor
+    Not(And(bbc, unimayor)),               # Pero no ambos
+    unimayor                               # Los estudiantes visitaron Unimayor hoy
+)
+
+# Comprobar si el conocimiento implica que llueve
+print(model_check(knowledge, rain))
+</code></pre>
+
+</body>
+</html>
